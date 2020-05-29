@@ -1,0 +1,4 @@
+Hola, las opciones posibles son:
+[1] Ver cotizacion
+[2] Ver Graficas
+[3] Cambiar parametros
