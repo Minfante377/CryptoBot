@@ -77,13 +77,20 @@ class telegram_bot():
                         last_prices = last_prices.split(",")
                         self.send_message(user_id,"Los ultimos precios registrados son:\nFECHA: "+last_prices[0]+"\nBTC = "+last_prices[1]+" USD"+"\nETH = "+last_prices[2]+" USD")
                     elif txt == '2':
-                        generate_plot('BTC', HOURS)
-                        generate_plot('ETH', HOURS)
+                        generate_plot('BTC', get_state(user_id, 'hours')[0][0])
+                        generate_plot('ETH', get_state(user_id, 'hours')[0][0])
                         self.send_img(user_id,"./btc.png")
                         self.send_img(user_id,"./eth.png")
                     elif txt == '3':
-                        self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf.\n")
+                        self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Si no desea tener en cuenta un parametro escriba -1 en su valor. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf, hours.\n")
                         set_field(user_id, "on_register")
+                    elif txt == '4':
+                        th_sup_btc = get_state(user_id,'th_sup_btc')[0][0]
+                        th_inf_btc = get_state(user_id,'th_inf_btc')[0][0]
+                        th_sup_eth = get_state(user_id,'th_sup_eth')[0][0]
+                        th_inf_eth = get_state(user_id,'th_inf_eth')[0][0]
+                        hours = str(get_state(user_id,'hours')[0][0])
+                        self.send_message(user_id,"Tus parametros actuales son:\nLIMITE SUPERIOR BTC = " +th_sup_btc+"\nLIMITE INFERIOR BTC = "+th_inf_btc+"\nLIMITE SUPERIOR ETH = "+th_sup_eth+"\nLIMITE INFERIOR ETH = "+th_inf_eth+"\nVENTANA DE TIEMPO PARA GRAFICOS = "+hours+"h")
                     elif txt == 'btc_ok':
                         set_field(user_id , "ack_btc")
                         self.send_message(user_id, " Alarma de BTC renoconida!")
