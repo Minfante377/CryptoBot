@@ -46,6 +46,8 @@ class telegram_bot():
                     res = change_ths(user_id,text[0],text[1],text[2],text[3])
                     if res ==1:
                         self.send_message(user_id, "Valores registrados con exito!")
+                        reset_field(user_id,"ack_eth")
+                        reset_field(user_id,"ack_btc")
                     else:
                         self.send_message(user_id, "Hubo un problema registrando sus valores. Intentelo nuevamente")
                     reset_field(user_id, "on_register")
@@ -60,6 +62,14 @@ class telegram_bot():
                     elif txt == '3':
                         self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf.\n")
                         set_field(user_id, "on_register")
+                    elif txt == 'btc_ok':
+                        set_field(user_id , "ack_btc")
+                        self.send_message(user_id, " Alarma de BTC renoconida!")
+                        print("BTC ACK = 1")
+                    elif txt == 'eth_ok':
+                        set_field(user_id , "ack_eth")
+                        self.send_message(user_id, " Alarma de ETH renoconida!")
+                        print("ETH ACK = 1")
                     else:    
                         self.display_options(user_id)
             else:

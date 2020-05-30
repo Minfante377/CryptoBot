@@ -9,9 +9,17 @@ def init_bot():
     queue = []
     telegram_bot = telegram_bot()
 
-def update_queue(target):
+def update_queue(user,msg):
     global queue
-    telegram_queue.append(target)
+    queue.append((user,msg))
+
+def check_queue():
+    global queue
+    while True:
+        for msg in queue:
+            telegram_bot.send_message(msg[0],msg[1])
+            queue.remove(msg)
+        time.sleep(0.1)
 
 def bot_loop():
     global queue
