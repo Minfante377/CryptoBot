@@ -93,11 +93,11 @@ class telegram_bot():
                         self.send_message(user_id,"Tus parametros actuales son:\nLIMITE SUPERIOR BTC = " +th_sup_btc+"\nLIMITE INFERIOR BTC = "+th_inf_btc+"\nLIMITE SUPERIOR ETH = "+th_sup_eth+"\nLIMITE INFERIOR ETH = "+th_inf_eth+"\nVENTANA DE TIEMPO PARA GRAFICOS = "+hours+"h")
                     elif txt == 'btc_ok':
                         set_field(user_id , "ack_btc")
-                        self.send_message(user_id, " Alarma de BTC renoconida!")
+                        self.send_message(user_id, " Alarma de BTC reconocida!")
                         print("BTC ACK = 1")
                     elif txt == 'eth_ok':
                         set_field(user_id , "ack_eth")
-                        self.send_message(user_id, " Alarma de ETH renoconida!")
+                        self.send_message(user_id, " Alarma de ETH reconocida!")
                         print("ETH ACK = 1")
                     else:    
                         self.display_options(user_id)
@@ -148,7 +148,7 @@ def generate_plot(name,hours):
         ax.plot(dates,btc)
         ax.set_title("Evolution of the price in the last "+str(hours)+" h")
         plt.xlabel("Date")
-        plt.ylabel("ETH price")
+        plt.ylabel("BTC price")
         fig.autofmt_xdate()
         ax.fmt_xdata = mdates.DateFormatter('%H:%M') 
         plt.grid()
