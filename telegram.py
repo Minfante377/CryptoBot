@@ -1,12 +1,11 @@
 import json 
 import requests
 import os
-from database import check_user, add_user, set_field, reset_field, get_state, change_ths
+from database import check_user, add_user, set_field, reset_field, get_state, change_parameters
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
-HOURS = 4
 
 class telegram_bot():
     
@@ -55,8 +54,12 @@ class telegram_bot():
             if int(check_user(user_id)) == 1:
                 if get_state(user_id,"on_register")[0][0] == 1:
                     txt = txt.strip(" ")
-                    text = txt.split(",")
-                    res = change_ths(user_id,text[0],text[1],text[2],text[3])
+                    try:
+                        text = txt.split(",")
+                        res = change_parameters(user_id,text[0],text[1],text[2],text[3], text[4])
+                    except Exception as e:
+                        print(e)
+                        res = 0
                     if res ==1:
                         self.send_message(user_id, "Valores registrados con exito!")
                         reset_field(user_id,"ack_eth")
@@ -92,7 +95,7 @@ class telegram_bot():
                     else:    
                         self.display_options(user_id)
             else:
-                self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf.\n")
+                self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Si no desea tener en cuenta un parametro escriba -1 en su valor. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf, hours.\n")
                 print(add_user(user_id))
                 set_field(user_id, "on_register")
         except Exception as e:

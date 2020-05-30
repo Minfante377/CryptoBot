@@ -4,7 +4,7 @@ def create_table():
     db = sqlite3.connect("telegram_user.db")
     cursor = db.cursor()
     try:
-        cursor.execute("""CREATE TABLE user (telegram_id VARCHAR(20) PRIMARY KEY,ack_btc INTEGER, ack_eth INTEGER,  on_register INTEGER ,th_sup_btc VARCHAR(30),th_inf_btc VARCHAR(30),th_sup_eth VARCHAR(30),th_inf_eth VARCHAR(30));""")
+        cursor.execute("""CREATE TABLE user (telegram_id VARCHAR(20) PRIMARY KEY,ack_btc INTEGER, ack_eth INTEGER,  on_register INTEGER ,th_sup_btc VARCHAR(30),th_inf_btc VARCHAR(30),th_sup_eth VARCHAR(30),th_inf_eth VARCHAR(30), hours INTEGER);""")
     except Exception as e:
         print(e)
         pass
@@ -13,7 +13,7 @@ def add_user(telegram_id,th_sup_btc = '-1.0' ,th_inf_btc = '-1.0', th_sup_eth = 
     try:
         db = sqlite3.connect("telegram_user.db")
         cursor = db.cursor()
-        query = '''INSERT OR REPLACE  INTO user (telegram_id, ack_btc, ack_eth ,on_register, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_eth) VALUES(''' + str(telegram_id)+''',0,0,0,'''+th_sup_btc+''','''+ th_inf_btc + ''','''+th_sup_eth + ''',''' + th_inf_eth + ''')'''
+        query = '''INSERT OR REPLACE  INTO user (telegram_id, ack_btc, ack_eth ,on_register, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_eth, hours) VALUES(''' + str(telegram_id)+''',0,0,0,'''+th_sup_btc+''','''+ th_inf_btc + ''','''+th_sup_eth + ''',''' + th_inf_eth + ''', 4)'''
         cursor.execute(query)
         db.commit()
         return 1
@@ -48,11 +48,22 @@ def reset_field(telegram_id, field):
     cursor.execute(query)
     db.commit()
 
-def change_ths (telegram_id, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_eth):
+def change_parameters (telegram_id, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_eth, hours):
     try:
+        int(hours)
+        float(th_sup_btc)
+        float(th_inf_btc)
+        float(th_sup_eth)
+        float(th_inf_eth)
+    except Exception as e:
+        print(e)
+        return 0
+    try:
+        if int(hours) < 0:
+            hours = '4'
         db = sqlite3.connect("telegram_user.db")
         cursor = db.cursor()
-        query = "UPDATE user SET th_sup_btc = "+th_sup_btc+",th_inf_btc = "+th_inf_btc+",th_sup_eth = "+th_sup_eth +", th_inf_eth = "+th_inf_eth + " WHERE telegram_id = " + str(telegram_id)
+        query = "UPDATE user SET th_sup_btc = "+th_sup_btc+",th_inf_btc = "+th_inf_btc+",th_sup_eth = "+th_sup_eth +", th_inf_eth = "+th_inf_eth +", hours =" + hours + " WHERE telegram_id = " + str(telegram_id)
         cursor.execute(query)
         db.commit()
         return 1

@@ -50,22 +50,20 @@ while True:
     for user in get_all_users():
         telegram_id = user[0]
         th_sup_btc = float(user[4])
-        if th_sup_btc < 0:
-            continue 
         ack_btc = int(user[1])
         ack_eth = int(user[2])
         th_inf_btc = float(user[5])
         th_sup_eth = float(user[6])
         th_inf_eth = float(user[7])
-        if ( btc_last_price > th_sup_btc and ack_btc == 0 ):
+        if ( btc_last_price > th_sup_btc and ack_btc == 0 and th_sup_btc > 0 ):
             update_queue(telegram_id, "Se ha superado el limite superior para BTC!!!\nCotizacion actual: "+str(btc_last_price)+"\nLimite superior = " +str(th_sup_btc)+ "\nEscriba btc_ok para eliminar la alarma")
-        elif ( btc_last_price < th_inf_btc and ack_btc == 0 ):
+        elif ( btc_last_price < th_inf_btc and ack_btc == 0 and th_inf_btc > 0 ):
             update_queue(telegram_id, "La cotizacion ha caido por debajo del limite inferior para BTC!!!\nCotizacion actual: "+str(btc_last_price)+"\nLimite inferior = " +str(th_inf_btc)+ "\nEscriba btc_ok para eliminar la alarma")
         elif btc_last_price > th_inf_btc and btc_last_price < th_sup_btc:
            reset_field(telegram_id, 'ack_btc') 
-        if ( eth_last_price > th_sup_eth and ack_eth == 0 ):
+        if ( eth_last_price > th_sup_eth and ack_eth == 0 and th_sup_eth > 0 ):
             update_queue(telegram_id, "Se ha superado el limite superior para ETH!!!\nCotizacion actual: "+str(eth_last_price)+"\nLimite superior = " +str(th_sup_eth) + "\nEscriba eth_ok para eliminar la alarma")
-        elif ( eth_last_price < th_inf_eth and ack_eth == 0):
+        elif ( eth_last_price < th_inf_eth and ack_eth == 0 and th_inf_eth > 0):
             update_queue(telegram_id, "La cotizacion ha caido por debajo del limite inferior para ETH!!!\nCotizacion actual: "+str(eth_last_price)+"\nLimite inferior = " +str(th_inf_eth) +"\n escriba eth_ok para eliminar la alarma")
         elif eth_last_price > th_inf_eth and eth_last_price < th_sup_eth:
             reset_field(telegram_id, "ack_eth")
