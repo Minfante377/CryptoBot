@@ -50,7 +50,7 @@ def reset_field(telegram_id, field):
 
 def change_parameters (telegram_id, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_eth, hours):
     try:
-        int(hours)
+        float(hours)
         float(th_sup_btc)
         float(th_inf_btc)
         float(th_sup_eth)
