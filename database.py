@@ -59,7 +59,7 @@ def change_parameters (telegram_id, th_sup_btc, th_inf_btc, th_sup_eth, th_inf_e
         print(e)
         return 0
     try:
-        if int(hours) < 0:
+        if float(hours) < 0:
             hours = '4'
         db = sqlite3.connect("telegram_user.db")
         cursor = db.cursor()
