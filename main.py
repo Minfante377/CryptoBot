@@ -6,7 +6,7 @@ from database import create_table, get_all_users, reset_field
 UPDATE_TIME = 5
 GRAPH = 10
 
-log = Logger("./history.txt")
+log = Logger("./history.txt", UPDATE_TIME)
 from queue_handler import init_bot, bot_loop, check_queue, update_queue
 create_table()
 init_bot()

@@ -13,16 +13,17 @@ class Currency:
 
 class Logger:
 
-    def __init__(self, path):
+    def __init__(self, path, step):
 
         self.path = path
         self.file = open(self.path,'a+')
         self.file.close()
+        self.step = step
 
     def log(self, prices, deltas):
         
         self.file = open(self.path, 'a+')
-        self.file.write("%s,%s,%s,%s,%s\n" %( datetime.now(), prices[0], prices[1], deltas[0], deltas[1]))
+        self.file.write("%s,%s,%s,%s,%s,%s\n" %( datetime.now(), prices[0], prices[1], deltas[0], deltas[1], self.step))
         self.file.close()
 
     def get_n_lines(self,n):
