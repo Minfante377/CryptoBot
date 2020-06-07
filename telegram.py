@@ -4,6 +4,8 @@ import os
 from database import check_user, add_user, set_field, reset_field, get_state, change_parameters
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from mpl_finance import candlestick2_ochl as candlestick
+import matplotlib.dates as dates
 from datetime import datetime
 
 
@@ -81,6 +83,8 @@ class telegram_bot():
                         generate_plot('ETH', get_state(user_id, 'hours')[0][0])
                         self.send_img(user_id,"./btc.png")
                         self.send_img(user_id,"./eth.png")
+                        self.send_img(user_id,"./btc_candlestick.png")
+                        self.send_img(user_id,"./eth_candlestick.png")
                     elif txt == '3':
                         self.send_message(user_id,"Para registrarse correctamente, escriba los limites superiores e inferiores de su alarma separados por coma. Si no desea tener en cuenta un parametro escriba -1 en su valor. Por ejemplo: btc_sup,btc_inf,eth_sup,eth_inf, hours.\n")
                         set_field(user_id, "on_register")
@@ -154,14 +158,63 @@ def generate_plot(name,hours):
         plt.grid()
         plt.savefig("./btc.png")
         plt.clf()
+        fig, ax = plt.subplots()
+        opens, closes, highs, lows , d = get_candlesticks(btc,dates,4)
+        candlestick(ax, opens, closes, highs, lows, width = 0.6)
+        print("Candlesticks for BTC plotted")
+        ax.set_title("Evolution of the price in the last "+str(hours)+" h")
+        plt.xlabel("Step")
+        plt.ylabel("BTC price")
+        plt.grid()
+        plt.savefig("./btc_candlestick.png")
+        plt.clf()
     if name == 'ETH':
         fig, ax = plt.subplots()
         ax.plot(dates,eth)
         ax.set_title("Evolution of the price in the last "+str(hours)+" h")
-        plt.xlabel("Date")
+        plt.xlabel("Step")
         plt.ylabel("ETH price")
         fig.autofmt_xdate()
         ax.fmt_xdata = mdates.DateFormatter('%H:%M') 
         plt.grid()
         plt.savefig("./eth.png")
         plt.clf()
+        fig, ax = plt.subplots()
+        opens, closes, highs, lows, d = get_candlesticks(eth,dates,4)
+        candlestick(ax, opens, closes, highs , lows, width = 0.6) 
+        ax.set_title("Evolution of the price in the last "+str(hours)+" h")
+        plt.xlabel("Date")
+        plt.ylabel("ETH price")
+        plt.grid()
+        plt.savefig("./eth_candlestick.png")
+        plt.clf()
+
+def get_candlesticks(price, date, ran):
+    
+    opens = []
+    closes = []
+    highs = []
+    lows = []
+    d = []
+    i = 0
+    while i < len(price) and i + ran - 1 < len(price):
+        maximum = price[-1-i]
+        minimum = price[-1-i]
+        closing = price[-1-i - ran + 1]
+        opening = price[-1-i]
+        for j in range(ran - 1):
+            if price[-1-i-j] > maximum:
+                maximun = price[-1-i-j]
+            if price[-1-i-j] < minimum:
+                minimum = price[-1-i-j]
+        opens.append(opening)
+        closes.append(closing)
+        highs.append(maximum)
+        lows.append(minimum)
+        d.append(date[i+ran-1])
+        i = i + ran - 1
+    return opens, closes, highs, lows, d
+
+    
+    
+    
