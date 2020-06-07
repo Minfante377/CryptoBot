@@ -15,14 +15,13 @@ def update_queue(user,msg):
 
 def check_queue():
     global queue
-    while True:
-        for msg in queue:
-            telegram_bot.send_message(msg[0],msg[1])
-            queue.remove(msg)
-        time.sleep(0.1)
+    for msg in queue:
+        telegram_bot.send_message(msg[0],msg[1])
+        queue.remove(msg)
 
 def bot_loop():
     global queue
     while True:
         telegram_bot.check_new_msg()
-        time.sleep(0.1)
+        check_queue()
+        time.sleep(0.5)
